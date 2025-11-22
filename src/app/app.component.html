@@ -3,17 +3,31 @@
 
 <main class="main">
   <div class="content">
-    <h1>Spis treści z Worda</h1>
-    <div *ngIf="pdfPages.length">
-      <div [innerHTML]="pdfPages[0]" (click)="onTocClick($event)"></div>
+    <div class="close-btn" title="Zamknij stronę" (click)="closePage()">&#10005;</div>
+    <!-- Nowoczesne logo w lewym górnym rogu -->
+    <h1>Nadzieja nie zawodzi (Rz 5,5)</h1>
+    <!-- Tylko wersja z drzewkiem i folderami -->
+  <h3>Materiały formacyjne dla Katolickiej Odnowy w Duchu Świętym Archidiecezji Wrocławskiej<br>Opracował Ks. Rajmund Pietkiewicz</h3>
+    <div *ngIf="pdfPages.length" class="toc-tree">
+      <ul class="tree-list">
+        <li *ngFor="let link of filteredPdfLinks; let i = index" [class.active]="selectedSectionText && selectedSectionIndex === i">
+          <div class="tree-folder-row">
+            <span class="tree-icon" (click)="toggleSection(i, $event)">📁</span>
+            <span class="tree-desc" (click)="toggleSection(i, $event)" [innerHTML]="highlightCzesc(link)"></span>
+          </div>
+          <div *ngIf="selectedSectionText && selectedSectionIndex === i" class="tree-content">
+            <div class="tree-controls">
+              <button (click)="speakSectionText()">Start</button>
+              <button (click)="pauseSpeech()">Pauza</button>
+              <button (click)="resumeSpeech()">Wznów</button>
+              <button (click)="stopSpeech()">Stop</button>
+            </div>
+            <textarea readonly class="tree-textarea">{{ selectedSectionText }}</textarea>
+          </div>
+        </li>
+      </ul>
     </div>
-    <div *ngIf="selectedSectionText" class="section-content">
-  <h2>Wybrana sekcja</h2>
-  <div>{{ selectedSectionText }}</div>
-  <button (click)="speakSectionText()">Start</button>
-  <button (click)="pauseSpeech()">Pauza</button>
-  <button (click)="stopSpeech()">Stop</button>
-    </div>
+    <div class="watermark">&#64;EO</div>
   </div>
 </main>
 

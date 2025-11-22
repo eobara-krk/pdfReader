@@ -56,6 +56,35 @@ declare const window: any;
   styleUrl: './app.component.css'
 })
 export class AppComponent implements AfterViewInit {
+  public highlightCzesc(text: string): string {
+    return text.replace(/Część(\s*\d*)/gi, '<b style="color:#e53935;text-decoration:underline">Część$1</b>');
+  }
+  public closePage() {
+    window.location.href = 'about:blank';
+  }
+  public selectedSectionIndex: number | null = null;
+  public get filteredPdfLinks(): string[] {
+    if (!this.pdfPages.length) return [];
+    return this.pdfPages[0].split('</p>').filter(l => l.trim().length > 0);
+  }
+  public toggleSection(i: number, event: MouseEvent) {
+    if (this.selectedSectionIndex === i) {
+      this.selectedSectionIndex = null;
+      this.selectedSectionText = '';
+    } else {
+      this.selectedSectionIndex = i;
+      const target = event.target as HTMLElement;
+      if (target && target.tagName === 'A') {
+        event.preventDefault();
+        const href = target.getAttribute('href');
+        if (href && href.startsWith('#_Toc')) {
+          this.displaySectionByAnchor(href);
+          return;
+        }
+      }
+      this.selectedSectionText = '';
+    }
+  }
   private utterance: SpeechSynthesisUtterance | null = null;
 
   speakSectionText(): void {
@@ -63,8 +92,10 @@ export class AppComponent implements AfterViewInit {
       // Zawsze zatrzymaj wszelkie dźwięki przed nowym startem
       window.speechSynthesis.cancel();
       this.utterance = null;
-      let textToRead = replaceRomanNumeralsWithPolish(this.selectedSectionText);
-      textToRead = customReplacements(textToRead);
+  let textToRead = replaceRomanNumeralsWithPolish(this.selectedSectionText);
+  textToRead = customReplacements(textToRead);
+  // Popraw wymowę 'Cześć' na 'Część' (gdyby syntezator mylił)
+  textToRead = textToRead.replace(/\bCześć\b/g, 'Część');
       this.utterance = new window.SpeechSynthesisUtterance(textToRead);
   this.utterance!.lang = 'pl-PL';
   this.utterance!.onend = () => { this.utterance = null; };
