@@ -274,11 +274,13 @@ body {
 }
 
 @media (max-width: 600px) {
-  .pdf-x-wrapper {
-    top: 46px !important; /* tuż pod X na mobile */
-    right: 8px !important;
-    align-items: flex-end;
+  .tree-desc, .tree-desc *, .tree-desc a, .tree-desc span, .tree-desc b {
+    color: #1976d2 !important;
+    text-decoration: none !important;
+    border-bottom: none !important;
+    background: none !important;
   }
+}
   .header-title {
     margin-top: 56px !important;
     font-size: 1.3rem !important;
@@ -317,4 +319,3 @@ body {
     align-items: flex-end !important;
     flex-shrink: 0 !important;
   }
-}
