@@ -72,9 +72,12 @@ export class AppComponent implements AfterViewInit {
     return this.pdfPages[0].split('</p>').filter(l => l.trim().length > 0);
   }
   public toggleSection(i: number, event: MouseEvent) {
-  // Zawsze zatrzymaj i wyczyść syntezator mowy przy zmianie sekcji
-  this.stopSpeech();
-  this.speechStopped = true;
+    // Zawsze zatrzymaj i wyczyść syntezator mowy przy zmianie sekcji
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    this.stopSpeech();
+    this.speechStopped = true;
     if (this.selectedSectionIndex === i) {
       this.selectedSectionIndex = null;
       this.selectedSectionText = '';
