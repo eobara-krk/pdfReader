@@ -2,7 +2,9 @@ function customReplacements(text: string): string {
   // Zamiana 'św.' na 'święty', 'Jan Paweł II' na 'Jan Paweł drugi', 'Rz' na 'Rzymian', cyfry arabskie na słowa
   let replaced = text.replace(/św\./gi, 'święty')
     .replace(/Jan Paweł II\.?/gi, 'Jan Paweł drugi')
-    .replace(/\bRz\b/g, 'Rzymian');
+    .replace(/\bRz\b/g, 'Rzymian')
+    .replace(/\bKor\b/g, 'Koryntian')
+    .replace(/\bKKK\b/g, 'Katechizm Kościoła Katolickiego');
   // Zamiana 'II' bezpośrednio po 'Jan Paweł' na 'drugi' (gdyby coś zostało)
   replaced = replaced.replace(/(Jan Paweł) II/gi, '$1 drugi');
   // Zamiana cyfr arabskich 1-30 na polskie słowa
