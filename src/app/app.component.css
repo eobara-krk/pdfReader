@@ -1,3 +1,11 @@
+@media (max-width: 600px) {
+  .content {
+    max-width: 98vw !important;
+    padding: 12px !important;
+    border-radius: 18px !important;
+    margin: 24px auto 0 auto !important;
+  }
+}
 /* BUTTON ZAMKNIJ */
 .close-btn {
   display: inline-block;
