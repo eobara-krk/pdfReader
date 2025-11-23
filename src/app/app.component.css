@@ -15,6 +15,15 @@
   color: transparent;
   text-shadow: 0 2px 12px rgba(23,105,170,0.09);
 }
+/* Logo na desktopie */
+.logo-box {
+  width: 72px !important;
+  height: 72px !important;
+}
+.logo-img {
+  width: 72px !important;
+  height: 72px !important;
+}
 @media (max-width: 600px) {
   .header-title {
     font-size: 1.35rem;
@@ -221,14 +230,14 @@ button:hover {
     position: relative;
   }
   .logo-box {
-  top: 8px;
-  left: 8px;
-  width: 28px;
-  height: 28px;
+    top: 8px;
+    left: 8px;
+    width: 24px !important;
+    height: 24px !important;
   }
   .logo-img {
-  width: 18px;
-  height: 18px;
+    width: 24px !important;
+    height: 24px !important;
   }
   .close-btn {
     top: 8px !important;
@@ -304,12 +313,15 @@ button:hover {
 .tree-desc {
   flex: 1;
   font-size: 1.13rem;
-  color: #1a355e;
   font-weight: 600;
   letter-spacing: 0.02em;
-  font-family: 'Segoe UI', 'Montserrat', 'Roboto', Arial, sans-serif;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(90deg, #1769aa 0%, #00bfae 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
   text-shadow: 0 1px 6px rgba(23,105,170,0.08);
-  background: linear-gradient(90deg, #e3f0ff 0%, #f8fafc 100%);
   border-radius: 8px;
   padding: 4px 12px;
   transition: color 0.2s, background 0.2s;
