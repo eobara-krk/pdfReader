@@ -1,4 +1,56 @@
+.close-btn {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 32px auto 12px auto;
+  padding: 14px 0;
+  font-size: 1.18rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ffd700 0%, #e53935 100%);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(229,57,53,0.13);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+.close-btn:hover {
+  background: linear-gradient(90deg, #e53935 0%, #ffd700 100%);
+  color: #fff;
+  transform: scale(1.04);
+}
+  .close-btn:hover {
+    background: #e53935;
+    color: #fff;
+    transform: scale(1.08);
+  }
 @media (max-width: 600px) {
+  .close-btn {
+    position: absolute;
+    top: 56px;
+    right: 8px;
+    width: 38px;
+    height: 38px;
+    font-size: 1.5rem;
+  }
+  .content {
+    max-width: 100vw !important;
+    padding: 24px 8px 18px 8px !important;
+    gap: 1.1rem !important;
+  }
+  .header-logo-title {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+  }
+  .tree-folder-row {
+    padding: 12px 8px !important;
+    font-size: 1rem !important;
+  }
   .header-subtitle {
     font-size: 1.25rem !important;
     margin-bottom: 0 !important;
@@ -21,22 +73,36 @@
 .logo-img {
   width: 96px !important;
   height: 96px !important;
-}
 
-.main {
-  width: 100vw;
-  min-height: 100vh;
-  background: linear-gradient(120deg, #f6f7fb 0%, #f4f6fc 100%);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 0;
+  .close-btn {
+    position: absolute;
+    top: 56px;
+    right: 24px;
+    z-index: 20;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.1rem;
+    background: rgba(255,255,255,0.92);
+    border-radius: 50%;
+    box-shadow: 0 2px 12px rgba(229,57,53,0.13);
+    color: #e53935;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, transform 0.18s;
+  }
+  .close-btn:hover {
+    background: #e53935;
+    color: #fff;
+    transform: scale(1.08);
+  }
 }
 
 .content {
   width: 100%;
   max-width: 700px;
-  background: linear-gradient(120deg, #ffffff 0%, #f6f7fb 100%);
+  background: #fff;
   border-radius: 32px;
   box-shadow: 0 12px 48px rgba(34,58,94,0.13), 0 2px 12px rgba(251,194,235,0.09);
   padding: 40px 32px 32px 32px;
@@ -60,7 +126,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: transparent;
+  color: #223a5e;
   text-shadow: 0 2px 12px rgba(34,58,94,0.13);
 }
 
@@ -76,14 +142,14 @@
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  color: transparent !important;
+  color: #223a5e !important;
   text-shadow: 0 2px 12px rgba(34,58,94,0.13);
 }
 
 .tree-list li {
   margin-bottom: 12px;
   border-radius: 14px;
-  background: linear-gradient(90deg, #f6f7fb 0%, #ffffff 100%);
+  background: #fff;
   box-shadow: 0 2px 8px rgba(34,58,94,0.07);
   border: 1px solid #d0e6ff;
   transition: box-shadow 0.2s, background 0.2s;
@@ -92,7 +158,7 @@
 }
 .tree-list li.active {
   box-shadow: 0 8px 24px rgba(34,58,94,0.13);
-  background: #fffbe6;
+  background: #e3eaf2;
   border: 1.5px solid #ffd700;
 }
 .tree-folder-row {
@@ -126,7 +192,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: transparent;
+  color: #223a5e;
   text-shadow: 0 1px 6px rgba(34,58,94,0.10);
   border-radius: 8px;
   padding: 4px 12px;
@@ -135,14 +201,14 @@
 }
 
 .tree-controls button:first-child {
-  background: #00bfae !important;
+  background: #1976d2 !important;
   color: #fff !important;
-  border: 2px solid #00bfae !important;
+  border: 2px solid #1976d2 !important;
 }
 .tree-controls button:last-child {
-  background: #ff4081 !important;
+  background: #d32f2f !important;
   color: #fff !important;
-  border: 2px solid #ff4081 !important;
+  border: 2px solid #d32f2f !important;
 }
 .tree-controls button:first-child:hover {
   background: linear-gradient(90deg, #ffd700 0%, #223a5e 100%);
@@ -201,7 +267,7 @@
 
 .pdf-x-wrapper {
   position: absolute;
-  top: 72px; /* większy odstęp od góry, pod X */
+  top: 8px; /* PDF w rogu */
   right: 24px;
   z-index: 12;
   display: flex;
@@ -214,7 +280,7 @@
   right: 28px;
   bottom: 18px;
   font-size: 1.25rem;
-  color: #000;
+  color: #223a5e;
   opacity: 0.45;
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   pointer-events: none;
@@ -248,7 +314,7 @@
 
 @media (max-width: 600px) {
   .pdf-x-wrapper {
-    top: 56px !important;
+    top: 46px !important; /* tuż pod X na mobile */
     right: 8px !important;
     align-items: flex-end;
   }
