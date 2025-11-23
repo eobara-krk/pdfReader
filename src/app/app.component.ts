@@ -97,7 +97,7 @@ export class AppComponent implements AfterViewInit {
 
   speakSectionText(): void {
     if (!('speechSynthesis' in window)) {
-      window.alert('Twoja przeglądarka nie obsługuje syntezatora mowy. Spróbuj użyć Chrome, Firefox lub Safari.');
+      window.alert('Twoja przeglądarka nie obsługuje syntezatora mowy. Spróbuj użyć Firefox.');
       return;
     }
     if (!this.selectedSectionText) {
@@ -112,7 +112,7 @@ export class AppComponent implements AfterViewInit {
       selectedVoice = voices.find(v => v.lang === 'pl-PL');
     }
     if (!selectedVoice) {
-      window.alert('Brak polskiego głosu w syntezatorze mowy.\n\nJak włączyć polski głos na telefonie Android:\n1. Otwórz ustawienia telefonu.\n2. Przejdź do "Język i wprowadzanie" > "Tekst na mowę".\n3. Wybierz "Silnik Google Tekst na mowę".\n4. W ustawieniach silnika wybierz język polski.\n5. Zainstaluj polski głos, jeśli jest dostępny.\n\nJeśli nie działa w Chrome, spróbuj w przeglądarce Firefox.\n\nNa iPhone/iPad: Ustaw polski jako język systemu i zainstaluj polski głos w ustawieniach dostępności.');
+      window.alert('Twoja przeglądarka nie obsługuje syntezatora mowy. Spróbuj użyć Firefox.');
       return;
     }
     window.speechSynthesis.cancel();
