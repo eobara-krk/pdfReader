@@ -56,6 +56,7 @@ declare const window: any;
   styleUrl: './app.component.css'
 })
 export class AppComponent implements AfterViewInit {
+  private speechStopped: boolean = false;
   public availableVoices: SpeechSynthesisVoice[] = [];
   public selectedVoiceName: string = 'A Marka';
 
@@ -104,8 +105,9 @@ export class AppComponent implements AfterViewInit {
       window.alert('Brak tekstu do odczytania.');
       return;
     }
-    window.speechSynthesis.cancel();
-    this.utterance = null;
+  window.speechSynthesis.cancel();
+  this.utterance = null;
+  this.speechStopped = false;
     const voices: SpeechSynthesisVoice[] = window.speechSynthesis.getVoices();
     let selectedVoice = voices.find(v => v.lang === 'pl-PL' && v.name.includes('Marek'));
     if (!selectedVoice) {
@@ -132,7 +134,7 @@ export class AppComponent implements AfterViewInit {
     if (temp.length > 0) fragments.push(temp);
     // Odtwarzaj fragmenty sekwencyjnie
     const speakFragments = (i: number) => {
-      if (i >= fragments.length) {
+      if (i >= fragments.length || this.speechStopped) {
         this.utterance = null;
         return;
       }
@@ -153,6 +155,7 @@ export class AppComponent implements AfterViewInit {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       this.utterance = null;
+      this.speechStopped = true;
     }
   }
   selectedSectionText: string = '';
