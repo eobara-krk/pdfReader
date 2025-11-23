@@ -75,9 +75,10 @@ export class AppComponent implements AfterViewInit {
     // Zawsze zatrzymaj i wyczyść syntezator mowy przy zmianie sekcji
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
+      this.speechStopped = true;
+      this.utterance = null;
     }
     this.stopSpeech();
-    this.speechStopped = true;
     if (this.selectedSectionIndex === i) {
       this.selectedSectionIndex = null;
       this.selectedSectionText = '';
