@@ -73,10 +73,7 @@ export class AppComponent implements AfterViewInit {
   }
   public toggleSection(i: number, event: MouseEvent) {
     // Zawsze zatrzymaj i wyczyść syntezator mowy przy zmianie sekcji
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      this.utterance = null;
-    }
+    this.stopSpeech();
     if (this.selectedSectionIndex === i) {
       this.selectedSectionIndex = null;
       this.selectedSectionText = '';
