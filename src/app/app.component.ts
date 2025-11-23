@@ -104,6 +104,9 @@ export class AppComponent implements AfterViewInit {
       window.alert('Brak tekstu do odczytania.');
       return;
     }
+    // Zatrzymaj poprzedni odczyt, jeśli trwa
+    window.speechSynthesis.cancel();
+    this.utterance = null;
     const voices: SpeechSynthesisVoice[] = window.speechSynthesis.getVoices();
     // Preferowany głos: polski męski "Marek"
     let selectedVoice = voices.find(v => v.lang === 'pl-PL' && v.name.includes('Marek'));
@@ -115,8 +118,6 @@ export class AppComponent implements AfterViewInit {
       window.alert('Twoja przeglądarka nie obsługuje syntezatora mowy. Spróbuj użyć Firefox.');
       return;
     }
-    window.speechSynthesis.cancel();
-    this.utterance = null;
     let textToRead = replaceRomanNumeralsWithPolish(this.selectedSectionText);
     textToRead = customReplacements(textToRead);
     textToRead = textToRead.replace(/\bCześć\b/g, 'Część');
