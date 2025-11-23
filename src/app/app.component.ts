@@ -104,14 +104,11 @@ export class AppComponent implements AfterViewInit {
       window.alert('Brak tekstu do odczytania.');
       return;
     }
-    // Zatrzymaj poprzedni odczyt, jeśli trwa
     window.speechSynthesis.cancel();
     this.utterance = null;
     const voices: SpeechSynthesisVoice[] = window.speechSynthesis.getVoices();
-    // Preferowany głos: polski męski "Marek"
     let selectedVoice = voices.find(v => v.lang === 'pl-PL' && v.name.includes('Marek'));
     if (!selectedVoice) {
-      // Jeśli nie ma Marka, wybierz pierwszy polski głos (np. kobiecy)
       selectedVoice = voices.find(v => v.lang === 'pl-PL');
     }
     if (!selectedVoice) {
@@ -121,13 +118,33 @@ export class AppComponent implements AfterViewInit {
     let textToRead = replaceRomanNumeralsWithPolish(this.selectedSectionText);
     textToRead = customReplacements(textToRead);
     textToRead = textToRead.replace(/\bCześć\b/g, 'Część');
-    this.utterance = new window.SpeechSynthesisUtterance(textToRead);
-    this.utterance!.lang = 'pl-PL';
-    if (this.utterance && selectedVoice) {
-      this.utterance.voice = selectedVoice;
+    // Dzielenie tekstu na fragmenty max 200 znaków (preferuj podział po kropce lub spacji)
+    const maxLen = 200;
+    const fragments: string[] = [];
+    let temp = textToRead;
+    while (temp.length > maxLen) {
+      let idx = temp.lastIndexOf('.', maxLen);
+      if (idx === -1) idx = temp.lastIndexOf(' ', maxLen);
+      if (idx === -1) idx = maxLen;
+      fragments.push(temp.slice(0, idx + 1).trim());
+      temp = temp.slice(idx + 1).trim();
     }
-    window.speechSynthesis.speak(this.utterance!);
-    this.utterance!.onend = () => { this.utterance = null; };
+    if (temp.length > 0) fragments.push(temp);
+    // Odtwarzaj fragmenty sekwencyjnie
+    const speakFragments = (i: number) => {
+      if (i >= fragments.length) {
+        this.utterance = null;
+        return;
+      }
+      this.utterance = new window.SpeechSynthesisUtterance(fragments[i]);
+      if (this.utterance) {
+        this.utterance.lang = 'pl-PL';
+        this.utterance.voice = selectedVoice;
+        this.utterance.onend = () => speakFragments(i + 1);
+        window.speechSynthesis.speak(this.utterance);
+      }
+    };
+    speakFragments(0);
   }
 
   // Usunięto pauza i wznów
