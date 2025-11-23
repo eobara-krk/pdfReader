@@ -97,13 +97,13 @@ export class AppComponent implements AfterViewInit {
 
   speakSectionText(): void {
     if (!('speechSynthesis' in window)) {
-      window.alert('Twoja przeglądarka nie obsługuje syntezatora mowy. Spróbuj użyć Chrome, Firefox lub Safari.');
+      window.alert('Nie słyszysz syntezatora mowy? Spróbuj otworzyć stronę w przeglądarce Firefox.');
       return;
     }
-    if (!this.selectedSectionText) {
-      window.alert('Brak tekstu do odczytania.');
-      return;
-    }
+if (!this.selectedSectionText || this.selectedSectionText === 'Nie znaleziono treści tej sekcji.') {
+  window.alert('Brak tekstu do odczytania.');
+  return;
+}
     const voices: SpeechSynthesisVoice[] = window.speechSynthesis.getVoices();
     // Preferowany głos: polski męski "Marek"
     let selectedVoice = voices.find(v => v.lang === 'pl-PL' && v.name.includes('Marek'));
@@ -112,7 +112,7 @@ export class AppComponent implements AfterViewInit {
       selectedVoice = voices.find(v => v.lang === 'pl-PL');
     }
     if (!selectedVoice) {
-      window.alert('Brak polskiego głosu w syntezatorze mowy.\n\nJak włączyć polski głos na telefonie Android:\n1. Otwórz ustawienia telefonu.\n2. Przejdź do "Język i wprowadzanie" > "Tekst na mowę".\n3. Wybierz "Silnik Google Tekst na mowę".\n4. W ustawieniach silnika wybierz język polski.\n5. Zainstaluj polski głos, jeśli jest dostępny.\n\nJeśli nie działa w Chrome, spróbuj w przeglądarce Firefox.\n\nNa iPhone/iPad: Ustaw polski jako język systemu i zainstaluj polski głos w ustawieniach dostępności.');
+  window.alert('Nie słyszysz syntezatora mowy? Otwórz aplikację w przeglądarce Firefox.');
       return;
     }
     window.speechSynthesis.cancel();
@@ -194,27 +194,27 @@ export class AppComponent implements AfterViewInit {
     }
     }
 
-    // Find and read section by anchor (href)
-    displaySectionByAnchor(href: string): void {
-      const html = this.fullHtml;
-      // Szukaj anchoru <a id="..."></a>
-      const anchorId = href.replace('#', '');
-      const anchorRegex = new RegExp(`<a id="${anchorId}"></a>`, 'i');
-      const anchorMatch = html.match(anchorRegex);
-      if (!anchorMatch || anchorMatch.index === undefined) {
-        this.selectedSectionText = 'Nie znaleziono początku sekcji.';
-        return;
-      }
-      const startIdx = anchorMatch.index;
-      // Znajdź kolejny anchor <a id="_TocXXXX"></a> po startIdx
-      const nextAnchorRegex = /<a id="_Toc\d+"><\/a>/g;
-      nextAnchorRegex.lastIndex = startIdx + 1;
-      const nextAnchorMatch = nextAnchorRegex.exec(html);
-      const endIdx = nextAnchorMatch ? nextAnchorMatch.index : html.length;
-      const sectionHtml = html.substring(startIdx, endIdx);
-      const sectionText = sectionHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-      this.selectedSectionText = sectionText || 'Nie znaleziono treści tej sekcji.';
-    }
+ displaySectionByAnchor(href: string): void {
+  const html = this.fullHtml;
+  // Szukaj anchoru <a id="..."></a> lub <a name="..."></a>
+  const anchorId = href.replace('#', '');
+  const anchorRegex = new RegExp(`<a (id|name)="${anchorId}"[\\s\\S]*?>`, 'i');
+  const anchorMatch = html.match(anchorRegex);
+  if (!anchorMatch || anchorMatch.index === undefined) {
+    this.selectedSectionText = 'Nie znaleziono początku sekcji.';
+    return;
+  }
+  const startIdx = anchorMatch.index;
+  // Znajdź kolejny anchor <a id="_TocXXXX"></a> lub <a name="_TocXXXX"></a> po startIdx
+  const nextAnchorRegex = /<a (id|name)="_Toc\d+"[\s\S]*?>/g;
+  nextAnchorRegex.lastIndex = startIdx + 1;
+  const nextAnchorMatch = nextAnchorRegex.exec(html);
+  const endIdx = nextAnchorMatch ? nextAnchorMatch.index : html.length;
+  const sectionHtml = html.substring(startIdx, endIdx);
+  const sectionText = sectionHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  console.log('Wyodrębniony tekst sekcji:', sectionText);
+  this.selectedSectionText = sectionText || 'Nie znaleziono treści tej sekcji.';
+}
 
   async ngAfterViewInit() {
     await this.showWordToc();
