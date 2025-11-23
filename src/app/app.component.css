@@ -1,9 +1,10 @@
 .close-btn {
-  display: block;
-  width: 100%;
-  max-width: 320px;
+  display: inline-block;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
   margin: 32px auto 12px auto;
-  padding: 14px 0;
+  padding: 14px 32px;
   font-size: 1.18rem;
   font-weight: 700;
   background: linear-gradient(90deg, #ffd700 0%, #e53935 100%);
