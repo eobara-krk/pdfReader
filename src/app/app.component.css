@@ -232,12 +232,12 @@ button:hover {
   .logo-box {
     top: 8px;
     left: 8px;
-    width: 24px !important;
-    height: 24px !important;
+    width: 40px !important;
+    height: 40px !important;
   }
   .logo-img {
-    width: 24px !important;
-    height: 24px !important;
+    width: 40px !important;
+    height: 40px !important;
   }
   .close-btn {
     top: 8px !important;

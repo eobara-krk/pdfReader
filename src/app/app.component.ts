@@ -105,9 +105,14 @@ export class AppComponent implements AfterViewInit {
       return;
     }
     const voices: SpeechSynthesisVoice[] = window.speechSynthesis.getVoices();
-    const plVoices = voices.filter(v => v.lang === 'pl-PL');
-    if (!plVoices.length) {
-      window.alert('Brak polskiego głosu w syntezatorze mowy. Spróbuj użyć innej przeglądarki lub systemu.');
+    // Preferowany głos: polski męski "Marek"
+    let selectedVoice = voices.find(v => v.lang === 'pl-PL' && v.name.includes('Marek'));
+    if (!selectedVoice) {
+      // Jeśli nie ma Marka, wybierz pierwszy polski głos (np. kobiecy)
+      selectedVoice = voices.find(v => v.lang === 'pl-PL');
+    }
+    if (!selectedVoice) {
+      window.alert('Brak polskiego głosu w syntezatorze mowy.\n\nJak włączyć polski głos na telefonie Android:\n1. Otwórz ustawienia telefonu.\n2. Przejdź do "Język i wprowadzanie" > "Tekst na mowę".\n3. Wybierz "Silnik Google Tekst na mowę".\n4. W ustawieniach silnika wybierz język polski.\n5. Zainstaluj polski głos, jeśli jest dostępny.\n\nJeśli nie działa w Chrome, spróbuj w przeglądarce Firefox.\n\nNa iPhone/iPad: Ustaw polski jako język systemu i zainstaluj polski głos w ustawieniach dostępności.');
       return;
     }
     window.speechSynthesis.cancel();
@@ -117,9 +122,7 @@ export class AppComponent implements AfterViewInit {
     textToRead = textToRead.replace(/\bCześć\b/g, 'Część');
     this.utterance = new window.SpeechSynthesisUtterance(textToRead);
     this.utterance!.lang = 'pl-PL';
-    // Ustaw wybrany głos z selecta
-    const selectedVoice = plVoices.find((v: SpeechSynthesisVoice) => v.name === this.selectedVoiceName) || plVoices[0];
-    if (selectedVoice != null && this.utterance != null) {
+    if (this.utterance && selectedVoice) {
       this.utterance.voice = selectedVoice;
     }
     window.speechSynthesis.speak(this.utterance!);
