@@ -64,6 +64,10 @@ export class AppComponent implements AfterViewInit {
     return text.replace(/Część(\s*\d*)/gi, '<b style="color:#e53935;text-decoration:underline">Część$1</b>');
   }
   public closePage() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setTimeout(() => window.speechSynthesis.cancel(), 0);
+    }
     window.location.href = 'about:blank';
   }
   public selectedSectionIndex: number | null = null;
