@@ -56,18 +56,7 @@
     margin-left: 0 !important;
     justify-content: flex-start !important;
   }
-  .header-subtitle {
-    font-size: 1.25rem !important;
-    margin-bottom: 0 !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.02em !important;
-    background: linear-gradient(90deg, #223a5e 0%, #4fd1c5 60%, #ffd700 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
-    color: transparent !important;
-    text-shadow: 0 2px 12px rgba(34,58,94,0.13) !important;
-  }
+  /* usunięto gradient i !important, subtytuł jak tytuł główny */
 
 .logo-box {
   width: 96px !important;
@@ -82,7 +71,7 @@
 .content {
   width: 100%;
   max-width: 700px;
-  background: #fff;
+  background: linear-gradient(135deg, #e3f0fc 0%, #cbe2f7 40%, #fafdff 100%);
   border-radius: 32px;
   box-shadow: 0 12px 48px rgba(34,58,94,0.13), 0 2px 12px rgba(251,194,235,0.09);
   padding: 40px 32px 32px 32px;
@@ -91,6 +80,10 @@
   flex-direction: column;
   gap: 1.7rem;
   position: relative;
+}
+
+body {
+  background: linear-gradient(120deg, #b3d8f6 0%, #eaf6ff 100%);
 }
 
 .header-title {
@@ -102,14 +95,12 @@
   text-align: center;
   display: block;
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(90deg, #223a5e 0%, #4fd1c5 60%, #ffd700 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   color: #223a5e;
-  text-shadow: 0 2px 12px rgba(34,58,94,0.13);
+  background: none;
+  text-shadow: 0 2px 12px rgba(34,58,94,0.13), 0 1px 0 #fff;
 }
 
+/* Subtytuł - bez gradientu, elegancki, analogicznie do tytułu głównego */
 .header-subtitle {
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   font-weight: 500;
@@ -118,43 +109,44 @@
   margin-top: 0.2rem;
   margin-bottom: 0;
   letter-spacing: 0.01em;
-  background: linear-gradient(90deg, #223a5e 0%, #4fd1c5 60%, #ffd700 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: #223a5e;
-  text-shadow: 0 2px 12px rgba(34,58,94,0.13);
+  color: #3a4a5e;
+  background: none;
+  text-shadow: 0 1px 8px rgba(34,58,94,0.10), 0 1px 0 #fff;
 }
 
+
 .tree-list li {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(34,58,94,0.07);
-  border: 1px solid #d0e6ff;
-  transition: box-shadow 0.2s, background 0.2s;
+  background: #f4f6fc;
+  box-shadow: 0 2px 8px rgba(34,58,94,0.05);
+  border: 1px solid #e3f0fc;
   padding: 0;
   list-style: none;
 }
+
 .tree-list li.active {
-  box-shadow: 0 8px 24px rgba(34,58,94,0.13);
-  background: #e3eaf2;
+  box-shadow: 0 8px 24px rgba(34,58,94,0.10);
+  background: #e3f0fc;
   border: 1.5px solid #ffd700;
 }
+
 .tree-folder-row {
   display: flex;
   align-items: center;
   gap: 16px;
   cursor: pointer;
-  padding: 18px 22px;
-  font-size: 1.08rem;
+  padding: 14px 18px;
+  font-size: 1.02rem;
   font-weight: 600;
   color: #223a5e;
   border-radius: 14px;
-  transition: background 0.2s;
+  background: #fafdff;
 }
+
 .tree-folder-row:hover {
-  background: #f4f6fc;
+  background: #b3d8f6;
+  color: #223a5e;
 }
 .tree-icon {
   font-size: 1.5em;
@@ -191,7 +183,8 @@
   border: 2px solid #d32f2f !important;
 }
 .tree-controls button:first-child:hover {
-  background: linear-gradient(90deg, #ffd700 0%, #223a5e 100%);
+    background: #ffd700;
+    color: #223a5e;
 }
 .tree-controls button:last-child:hover {
   background: linear-gradient(90deg, #e53935 0%, #223a5e 100%);
@@ -289,10 +282,16 @@
   .header-title {
     margin-top: 56px !important;
     font-size: 1.3rem !important;
+    color: #223a5e !important;
+    background: none !important;
+    text-shadow: 0 2px 12px rgba(34,58,94,0.13), 0 1px 0 #fff !important;
   }
   .header-subtitle {
     font-size: 1rem !important;
     font-weight: 500 !important;
+    color: #3a4a5e !important;
+    background: none !important;
+    text-shadow: 0 1px 8px rgba(34,58,94,0.10), 0 1px 0 #fff !important;
   }
   .header-logo-title {
     flex-direction: row !important;

@@ -12,11 +12,9 @@
     </div>
     <!-- Tylko wersja z drzewkiem i folderami -->
   <h3 class="header-subtitle">
-    Materiały formacyjne dla Katolickiej Odnowy w Duchu Świętym Archidiecezji Wrocławskiej<br>pdf. Opracował Ks. Rajmund Pietkiewicz
+    Materiały formacyjne dla Katolickiej Odnowy w Duchu Świętym Archidiecezji Wrocławskiej
   </h3>
-    <div style="margin-bottom: 18px; text-align: center;">
-      <!-- Usunięto wybór głosu, domyślnie 'A Marka' -->
-    </div>
+
     <div *ngIf="pdfPages.length" class="toc-tree">
       <ul class="tree-list">
         <li *ngFor="let link of filteredPdfLinks; let i = index" [class.active]="selectedSectionText && selectedSectionIndex === i">
