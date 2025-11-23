@@ -1,13 +1,18 @@
 <main class="main">
   <div class="content">
-    <div class="logo-box">
-      <img src="source.png" alt="Logo" class="logo-img" />
+    <div class="header-logo-title">
+      <div class="logo-box">
+        <img src="source.png" alt="Logo" class="logo-img" />
+      </div>
+      <h1 class="header-title">Nadzieja nie zawodzi (Rz 5,5)</h1>
     </div>
     <div class="close-btn" title="Zamknij stronę" (click)="closePage()">&#10005;</div>
-    <!-- Nowoczesne logo w lewym górnym rogu -->
-    <h1>Nadzieja nie zawodzi (Rz 5,5)</h1>
+    <a href="Spes non confundit_jesień_2025_wersja rozesłana.pdf" target="_blank" class="pdf-link" title="Pobierz PDF">📑 PDF</a>
     <!-- Tylko wersja z drzewkiem i folderami -->
-  <h3>Materiały formacyjne dla Katolickiej Odnowy w Duchu Świętym Archidiecezji Wrocławskiej<br>Opracował Ks. Rajmund Pietkiewicz</h3>
+  <h3>Materiały formacyjne dla Katolickiej Odnowy w Duchu Świętym Archidiecezji Wrocławskiej<br>pdf. Opracował Ks. Rajmund Pietkiewicz</h3>
+    <div style="margin-bottom: 18px; text-align: center;">
+      <!-- Usunięto wybór głosu, domyślnie 'A Marka' -->
+    </div>
     <div *ngIf="pdfPages.length" class="toc-tree">
       <ul class="tree-list">
         <li *ngFor="let link of filteredPdfLinks; let i = index" [class.active]="selectedSectionText && selectedSectionIndex === i">
@@ -18,8 +23,6 @@
           <div *ngIf="selectedSectionText && selectedSectionIndex === i" class="tree-content">
             <div class="tree-controls">
               <button (click)="speakSectionText()">Start</button>
-              <button (click)="pauseSpeech()">Pauza</button>
-              <button (click)="resumeSpeech()">Wznów</button>
               <button (click)="stopSpeech()">Stop</button>
             </div>
             <textarea readonly class="tree-textarea">{{ selectedSectionText }}</textarea>

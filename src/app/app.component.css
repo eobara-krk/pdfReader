@@ -1,22 +1,103 @@
+/* Estetyczne h3 pod tytułem */
 h3 {
-  font-size: 1.18rem;
-  font-weight: 600;
-  background: linear-gradient(90deg, #1769aa 0%, #00bfae 60%, #ff9800 100%);
-  color: #1769aa;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
-  margin-bottom: 12px;
-  margin-top: 0;
-  letter-spacing: 0.03em;
-  text-align: center;
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-  text-shadow: 0 2px 12px rgba(23,105,170,0.09);
-  border-radius: 12px;
-  padding: 10px 12px;
-  box-shadow: 0 2px 8px rgba(23,105,170,0.07);
+  color: #1769aa;
+  font-weight: 500;
+  text-align: center;
+  font-size: 1.12rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.18rem;
+  letter-spacing: 0.01em;
 }
+@media (max-width: 600px) {
+  h3 {
+    font-size: 0.98rem;
+    margin-bottom: 0.5rem;
+  }
+}
+.pdf-link {
+  position: absolute;
+  top: 56px;
+  right: 24px;
+  z-index: 12;
+  font-size: 1.18rem;
+  color: #1769aa;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding-top: 8px;
+}
+@media (max-width: 600px) {
+  .pdf-link {
+    top: 48px !important;
+    right: 12px !important;
+    font-size: 1.08rem !important;
+    padding-top: 8px !important;
+  }
+}
+  h1 {
+    margin-top: 92px !important;
+    font-size: 1.3rem !important;
+  }
+  /* Wrapper na logo i tytuł */
+  .header-logo-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 12px;
+    margin-bottom: 0.5rem;
+  }
+  .logo-box {
+    position: relative;
+    width: 92px;
+    height: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  .logo-img {
+    width: 82px;
+    height: 82px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 16px rgba(23,105,170,0.22));
+  }
+  .header-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0.2rem auto 0 auto;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    text-align: center;
+    display: block;
+    color: #1769aa;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    text-shadow: 0 2px 12px rgba(23,105,170,0.09);
+  }
+  @media (max-width: 600px) {
+    .header-logo-title {
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-top: 8px;
+      margin-bottom: 0.3rem;
+    }
+    .logo-box {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto;
+    }
+    .logo-img {
+      width: 54px;
+      height: 54px;
+    }
+    .header-title {
+      font-size: 1.35rem;
+      margin: 0.1rem auto 0 auto;
+      text-align: center;
+    }
+  }
 /* Logo w lewym górnym rogu kontenera */
 /* Logo w lewym górnym rogu kontenera */
 /* Logo w lewym górnym rogu kontenera - większe */
@@ -219,36 +300,58 @@ button:hover {
     transform: translateY(-2px) scale(1.04);
 }
 @media (max-width: 600px) {
-    .content {
-        padding: 8px 2px;
-        max-width: 100vw;
-        margin: 0;
-        border-radius: 0;
-        box-shadow: none;
-    }
-    .section-content {
-        padding: 8px 4px;
-        font-size: 0.98rem;
-        margin-bottom: 12px;
-        border-radius: 8px;
-    }
-    .controls {
-        flex-direction: column;
-        gap: 8px;
-        align-items: stretch;
-    }
-    button {
-        padding: 10px 0;
-        font-size: 1rem;
-        width: 100%;
-        margin: 0 0 8px 0;
-        border-radius: 16px;
-    }
+  .content {
+    padding: 18px 2px 8px 2px;
+    max-width: 100vw;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    position: relative;
+  }
+  .logo-box {
+    top: 8px !important;
+    left: 8px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+  .logo-img {
+    width: 38px !important;
+    height: 38px !important;
+  }
+  .close-btn {
+    top: 8px !important;
+    right: 8px !important;
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 1.5rem !important;
+  }
+  h1 {
+    margin-top: 56px !important;
+    font-size: 1.3rem !important;
+  }
+  .section-content {
+    padding: 8px 4px;
+    font-size: 0.98rem;
+    margin-bottom: 12px;
+    border-radius: 8px;
+  }
+  .controls {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  button {
+    padding: 10px 0;
+    font-size: 1rem;
+    width: 100%;
+    margin: 0 0 8px 0;
+    border-radius: 16px;
+  }
 }
 
 /* Styl nowoczesnego drzewka folderów i sekcji */
 .toc-tree {
-  margin-top: 24px;
+  margin-top: 4px;
 }
 .tree-list {
   list-style: none;

@@ -56,6 +56,9 @@ declare const window: any;
   styleUrl: './app.component.css'
 })
 export class AppComponent implements AfterViewInit {
+  public availableVoices: SpeechSynthesisVoice[] = [];
+  public selectedVoiceName: string = 'A Marka';
+
   public highlightCzesc(text: string): string {
     return text.replace(/Część(\s*\d*)/gi, '<b style="color:#e53935;text-decoration:underline">Część$1</b>');
   }
@@ -68,6 +71,11 @@ export class AppComponent implements AfterViewInit {
     return this.pdfPages[0].split('</p>').filter(l => l.trim().length > 0);
   }
   public toggleSection(i: number, event: MouseEvent) {
+    // Zawsze zatrzymaj i wyczyść syntezator mowy przy zmianie sekcji
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      this.utterance = null;
+    }
     if (this.selectedSectionIndex === i) {
       this.selectedSectionIndex = null;
       this.selectedSectionText = '';
@@ -88,34 +96,37 @@ export class AppComponent implements AfterViewInit {
   private utterance: SpeechSynthesisUtterance | null = null;
 
   speakSectionText(): void {
-    if ('speechSynthesis' in window && this.selectedSectionText) {
-      // Zawsze zatrzymaj wszelkie dźwięki przed nowym startem
-      window.speechSynthesis.cancel();
-      this.utterance = null;
-  let textToRead = replaceRomanNumeralsWithPolish(this.selectedSectionText);
-  textToRead = customReplacements(textToRead);
-  // Popraw wymowę 'Cześć' na 'Część' (gdyby syntezator mylił)
-  textToRead = textToRead.replace(/\bCześć\b/g, 'Część');
-      this.utterance = new window.SpeechSynthesisUtterance(textToRead);
-  this.utterance!.lang = 'pl-PL';
-  this.utterance!.onend = () => { this.utterance = null; };
-  window.speechSynthesis.speak(this.utterance!);
-    } else {
-      window.alert('Syntezator mowy nie jest dostępny lub brak tekstu.');
+    if (!('speechSynthesis' in window)) {
+      window.alert('Twoja przeglądarka nie obsługuje syntezatora mowy. Spróbuj użyć Chrome, Firefox lub Safari.');
+      return;
     }
+    if (!this.selectedSectionText) {
+      window.alert('Brak tekstu do odczytania.');
+      return;
+    }
+    const voices: SpeechSynthesisVoice[] = window.speechSynthesis.getVoices();
+    const plVoices = voices.filter(v => v.lang === 'pl-PL');
+    if (!plVoices.length) {
+      window.alert('Brak polskiego głosu w syntezatorze mowy. Spróbuj użyć innej przeglądarki lub systemu.');
+      return;
+    }
+    window.speechSynthesis.cancel();
+    this.utterance = null;
+    let textToRead = replaceRomanNumeralsWithPolish(this.selectedSectionText);
+    textToRead = customReplacements(textToRead);
+    textToRead = textToRead.replace(/\bCześć\b/g, 'Część');
+    this.utterance = new window.SpeechSynthesisUtterance(textToRead);
+    this.utterance!.lang = 'pl-PL';
+    // Ustaw wybrany głos z selecta
+    const selectedVoice = plVoices.find((v: SpeechSynthesisVoice) => v.name === this.selectedVoiceName) || plVoices[0];
+    if (selectedVoice != null && this.utterance != null) {
+      this.utterance.voice = selectedVoice;
+    }
+    window.speechSynthesis.speak(this.utterance!);
+    this.utterance!.onend = () => { this.utterance = null; };
   }
 
-  pauseSpeech(): void {
-    if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
-      window.speechSynthesis.pause();
-    }
-  }
-
-  resumeSpeech(): void {
-    if ('speechSynthesis' in window && window.speechSynthesis.paused) {
-      window.speechSynthesis.resume();
-    }
-  }
+  // Usunięto pauza i wznów
 
   stopSpeech(): void {
     if ('speechSynthesis' in window) {
@@ -193,7 +204,7 @@ export class AppComponent implements AfterViewInit {
       }
       const startIdx = anchorMatch.index;
       // Znajdź kolejny anchor <a id="_TocXXXX"></a> po startIdx
-  const nextAnchorRegex = /<a id="_Toc\d+"><\/a>/g;
+      const nextAnchorRegex = /<a id="_Toc\d+"><\/a>/g;
       nextAnchorRegex.lastIndex = startIdx + 1;
       const nextAnchorMatch = nextAnchorRegex.exec(html);
       const endIdx = nextAnchorMatch ? nextAnchorMatch.index : html.length;
@@ -205,5 +216,14 @@ export class AppComponent implements AfterViewInit {
   async ngAfterViewInit() {
     await this.showWordToc();
     this.selectedPage = 0;
+    // Pobierz dostępne polskie głosy i ustaw domyślnie 'A Marka'
+    const voices: SpeechSynthesisVoice[] = window.speechSynthesis.getVoices();
+    this.availableVoices = voices.filter(v => v.lang === 'pl-PL');
+    const markaVoice = this.availableVoices.find(v => v.name === 'A Marka');
+    if (markaVoice) {
+      this.selectedVoiceName = markaVoice.name;
+    } else if (this.availableVoices.length) {
+      this.selectedVoiceName = this.availableVoices[0].name;
+    }
   }
 }
