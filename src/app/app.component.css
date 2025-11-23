@@ -160,11 +160,8 @@ body {
   font-weight: 600;
   letter-spacing: 0.02em;
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(90deg, #223a5e 0%, #4fd1c5 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: #223a5e;
+  background: none;
+  color: #223a5e !important;
   text-shadow: 0 1px 6px rgba(34,58,94,0.10);
   border-radius: 8px;
   padding: 4px 12px;
