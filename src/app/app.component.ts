@@ -7,8 +7,18 @@ function customReplacements(text: string): string {
     .replace(/\bKKK\b/g, 'Katechizm Kościoła Katolickiego');
   // Zamiana 'II' bezpośrednio po 'Jan Paweł' na 'drugi' (gdyby coś zostało)
   replaced = replaced.replace(/(Jan Paweł) II/gi, '$1 drugi');
-  // Zamiana cyfr arabskich 1-30 na polskie słowa
-  replaced = replaced.replace(/\b([1-9]|1[0-9]|2[0-9]|30)\b/g, (match) => arabicToPolish[parseInt(match)] || match);
+  // Zamiana cyfr arabskich 1-30 na polskie słowa, ale nie zamieniaj jeśli liczba jest w kontekście roku
+  replaced = replaced.replace(/\b([1-9]|1[0-9]|2[0-9]|30)\b/g, (match, p1, offset, string) => {
+    // Sprawdź czy liczba jest w kontekście roku
+    // Szukaj 'roku', 'r.', 'w roku', 'w r.' w promieniu 0-6 znaków przed lub po liczbie
+    const before = string.slice(Math.max(0, offset - 6), offset).toLowerCase();
+    const after = string.slice(offset + match.length, offset + match.length + 6).toLowerCase();
+    const rokContext = /(roku|r\.|w roku|w r\.)/;
+    if (rokContext.test(before) || rokContext.test(after)) {
+      return match;
+    }
+    return arabicToPolish[parseInt(match)] || match;
+  });
   return replaced;
 }
 // Map for roman numerals to arabic numbers
@@ -22,6 +32,35 @@ const arabicToPolish: { [key: number]: string } = {
   11: 'jedenaście', 12: 'dwanaście', 13: 'trzynaście', 14: 'czternaście', 15: 'piętnaście', 16: 'szesnaście', 17: 'siedemnaście', 18: 'osiemnaście', 19: 'dziewiętnaście', 20: 'dwadzieścia',
   21: 'dwadzieścia jeden', 22: 'dwadzieścia dwa', 23: 'dwadzieścia trzy', 24: 'dwadzieścia cztery', 25: 'dwadzieścia pięć', 26: 'dwadzieścia sześć', 27: 'dwadzieścia siedem', 28: 'dwadzieścia osiem', 29: 'dwadzieścia dziewięć', 30: 'trzydzieści'
 };
+// Funkcja dzieląca sekcję na bloki według słowa 'BLOK'
+function podzielNaBloki(text: string): { bloki: { [key: string]: string } } {
+  // BLOK w nawiasie nie jest traktowany jako blok
+  // Szukamy tylko BLOK I, BLOK II, BLOK III itd. poza nawiasami
+  const blokRegex = /(^|[^\(])\bBLOK\s*[IVX]+\b/g;
+  const blokMatches: { key: string, index: number }[] = [];
+  let match;
+  const regex = /\bBLOK\s*[IVX]+\b/g;
+  while ((match = regex.exec(text)) !== null) {
+    // Sprawdzamy, czy nie jest w nawiasie
+    const before = text.slice(Math.max(0, match.index - 1), match.index);
+    if (before !== '(') {
+      blokMatches.push({ key: match[0], index: match.index });
+    }
+  }
+  const bloki: { [key: string]: string } = {};
+  // Wprowadzenie: tekst przed pierwszym BLOK
+  if (blokMatches.length > 0) {
+    bloki['Wprowadzenie'] = text.slice(0, blokMatches[0].index).trim();
+    for (let i = 0; i < blokMatches.length; i++) {
+      const start = blokMatches[i].index + blokMatches[i].key.length;
+      const end = blokMatches[i + 1] ? blokMatches[i + 1].index : text.length;
+      bloki[blokMatches[i].key] = text.slice(start, end).trim();
+    }
+  } else {
+    bloki['Wprowadzenie'] = text.trim();
+  }
+  return { bloki };
+}
 
 function romanToArabic(roman: string): number {
   let num = 0;
@@ -58,6 +97,81 @@ declare const window: any;
   styleUrl: './app.component.css'
 })
 export class AppComponent implements AfterViewInit {
+  // Stan otwarcia podfolderów BLOK
+  public openedBlok: { [key: string]: boolean } = {};
+
+  toggleBlok(blokKey: string): void {
+    // Zamknij wszystkie inne bloki
+    Object.keys(this.openedBlok).forEach(key => {
+      this.openedBlok[key] = false;
+    });
+    // Otwórz/zamknij wybrany blok
+    this.openedBlok[blokKey] = !this.openedBlok[blokKey];
+  }
+  // Czytanie tekstu wybranego bloku
+  speakBlokText(sectionIdx: number, blokKey: string): void {
+    if (!('speechSynthesis' in window)) {
+      window.alert('Twoja przeglądarka nie obsługuje syntezatora mowy. Spróbuj użyć Firefox.');
+      return;
+    }
+    const sectionText = this.selectedSectionText;
+    const blokText = this.podzielNaBloki(sectionText).bloki[blokKey];
+    if (!blokText) {
+      window.alert('Brak tekstu do odczytania.');
+      return;
+    }
+    this.speechStopped = false;
+    window.speechSynthesis.cancel();
+    this.utterance = null;
+    const voices: SpeechSynthesisVoice[] = window.speechSynthesis.getVoices();
+    let selectedVoice = voices.find(v => v.lang === 'pl-PL' && v.name.includes('Marek'));
+    if (!selectedVoice) {
+      selectedVoice = voices.find(v => v.lang === 'pl-PL');
+    }
+    if (!selectedVoice) {
+      window.alert('Twoja przeglądarka nie obsługuje syntezatora mowy. Spróbuj użyć Firefox.');
+      return;
+    }
+    let textToRead = replaceRomanNumeralsWithPolish(blokText);
+    textToRead = customReplacements(textToRead);
+    textToRead = textToRead.replace(/\bCześć\b/g, 'Część');
+    // Dzielenie tekstu na fragmenty max 200 znaków (preferuj podział po kropce lub spacji)
+    const maxLen = 200;
+    const fragments: string[] = [];
+    let temp = textToRead;
+    while (temp.length > maxLen) {
+      let idx = temp.lastIndexOf('.', maxLen);
+      if (idx === -1) idx = temp.lastIndexOf(' ', maxLen);
+      if (idx === -1) idx = maxLen;
+      fragments.push(temp.slice(0, idx + 1).trim());
+      temp = temp.slice(idx + 1).trim();
+    }
+    if (temp.length > 0) fragments.push(temp);
+    // Odtwarzaj fragmenty sekwencyjnie
+    const speakFragments = (i: number) => {
+      if (i >= fragments.length || this.speechStopped) {
+        this.utterance = null;
+        return;
+      }
+      this.utterance = new window.SpeechSynthesisUtterance(fragments[i]);
+      if (this.utterance) {
+        this.utterance.lang = 'pl-PL';
+        this.utterance.voice = selectedVoice;
+        this.utterance.onend = () => speakFragments(i + 1);
+        window.speechSynthesis.speak(this.utterance);
+      }
+    };
+    speakFragments(0);
+  }
+  // Udostępnienie funkcji podziału na bloki w szablonie
+  podzielNaBloki(text: string): { bloki: { [key: string]: string } } {
+    return podzielNaBloki(text);
+  }
+
+  blokKeys(text: string): string[] {
+    const bloki = podzielNaBloki(text).bloki;
+    return Object.keys(bloki);
+  }
   private speechStopped: boolean = false;
   public availableVoices: SpeechSynthesisVoice[] = [];
   public selectedVoiceName: string = 'A Marka';
@@ -91,6 +205,13 @@ export class AppComponent implements AfterViewInit {
       this.selectedSectionText = '';
     } else {
       this.selectedSectionIndex = i;
+      // Scrolluj do wybranego folderu
+      setTimeout(() => {
+        const el = document.querySelectorAll('.tree-folder-row')[i] as HTMLElement;
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
       const target = event.target as HTMLElement;
       if (target && target.tagName === 'A') {
         event.preventDefault();

@@ -1,3 +1,163 @@
+/* Wrapper z pionową linią prowadzącą do podfolderów BLOK */
+.tree-connector-wrapper {
+  position: relative;
+  margin-left: 32px;
+  padding-left: 18px;
+}
+.tree-connector {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, #b3c6ff 0%, #e573a3 100%);
+  border-radius: 1px;
+  z-index: 0;
+}
+.blok-list-inner {
+  position: relative;
+  z-index: 1;
+}
+.blok-item {
+  margin-left: 24px;
+  margin-bottom: 8px;
+}
+.blok-item .tree-folder-row {
+  box-shadow: 0 4px 16px rgba(180, 180, 255, 0.18);
+  border-width: 3px;
+  border-style: solid;
+  font-weight: bold;
+  position: relative;
+}
+.blok-item .tree-content {
+  box-shadow: 0 4px 16px rgba(180, 180, 255, 0.18);
+  border: 2px solid #b3c6ff;
+  margin-left: 0;
+  margin-top: -2px;
+  padding: 16px;
+}
+
+/* Gradient pastelowy tła drzewka */
+.toc-tree {
+  background: linear-gradient(135deg, #e3f0ff 0%, #ffe4ef 100%);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(180, 180, 255, 0.08);
+  padding: 18px 12px 18px 12px;
+  margin: 18px 0;
+}
+
+.tree-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+.tree-folder-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  background: #f6f8fa;
+  border-radius: 12px;
+  padding: 10px 18px;
+  margin: 8px 0 0 0;
+  font-weight: 600;
+  font-size: 1.08rem;
+  box-shadow: 0 1px 4px rgba(180, 180, 200, 0.07);
+  cursor: pointer;
+  transition: background 0.22s, box-shadow 0.22s, transform 0.22s;
+}
+.tree-folder-row:hover {
+  background: #e7eaf3;
+  box-shadow: 0 2px 8px rgba(180, 180, 200, 0.13);
+  transform: scale(1.01);
+}
+
+
+.tree-list li.active .tree-folder-row {
+  background: #f3e3ff;
+  border: 2px solid #b39ddb;
+  box-shadow: 0 2px 8px rgba(179, 157, 219, 0.13);
+}
+
+/* Kolory bloków */
+
+.blok-item .tree-folder-row {
+  background: linear-gradient(90deg, #f6f8fa 0%, #ece9f6 100%);
+  border-radius: 12px 12px 0 0;
+  border: 2px solid #cfd8dc;
+  box-shadow: 0 1px 4px rgba(180, 180, 200, 0.07);
+  font-weight: bold;
+  margin-left: 18px;
+}
+.blok-item .tree-folder-row[data-blok="BLOK I"] {
+  background: linear-gradient(90deg, #e3f0ff 0%, #b3c6fc 100%);
+  border-color: #90caf9;
+}
+.blok-item .tree-folder-row[data-blok="BLOK II"] {
+  background: linear-gradient(90deg, #ede7f6 0%, #d1c4e9 100%);
+  border-color: #b39ddb;
+}
+.blok-item .tree-folder-row[data-blok="BLOK III"] {
+  background: linear-gradient(90deg, #fce4ec 0%, #f8bbd0 100%);
+  border-color: #f48fb1;
+}
+
+.blok-item .tree-content {
+  background: #f6f8fa;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 1px 4px rgba(180, 180, 200, 0.07);
+  margin: 0 0 12px 18px;
+  padding: 16px;
+}
+
+.tree-icon {
+  font-size: 1.3em;
+  transition: filter 0.18s;
+  filter: drop-shadow(0 1px 2px #b3c6ff);
+}
+.tree-folder-row:hover .tree-icon {
+  filter: drop-shadow(0 2px 6px #81d4fa);
+}
+
+.tree-desc {
+  color: #2d2d2d;
+  font-size: 1.08rem;
+  letter-spacing: 0.01em;
+}
+
+.tree-controls button {
+  background: linear-gradient(90deg, #b3e5fc 0%, #e573a3 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  margin-right: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(180, 180, 255, 0.08);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+}
+.tree-controls button:hover {
+  background: linear-gradient(90deg, #e573a3 0%, #b3e5fc 100%);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.tree-textarea {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 8px;
+  border: 1px solid #b3c6ff;
+  background: #fff;
+  font-size: 1.04rem;
+  color: #2d2d2d;
+  margin-top: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 8px rgba(180, 180, 255, 0.08);
+  resize: vertical;
+}
 @media (max-width: 600px) {
   .header-logo-title {
     padding-left: 4px !important;

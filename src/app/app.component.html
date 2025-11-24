@@ -23,11 +23,36 @@
             <span class="tree-desc" (click)="toggleSection(i, $event)" [innerHTML]="highlightCzesc(link)"></span>
           </div>
           <div *ngIf="selectedSectionText && selectedSectionIndex === i" class="tree-content">
-            <div class="tree-controls">
-              <button (click)="speakSectionText()">Start</button>
-              <button (click)="stopSpeech()">Stop</button>
-            </div>
-            <textarea readonly class="tree-textarea">{{ selectedSectionText }}</textarea>
+                <!-- Podział na bloki: jeśli są bloki, nie pokazuj całości tekstu -->
+                <ng-container *ngIf="selectedSectionText">
+                  <ng-container *ngIf="blokKeys(selectedSectionText).length > 0; else showWholeText">
+                    <div class="blok-list tree-connector-wrapper">
+                      <div class="tree-connector"></div>
+                      <div class="blok-list-inner">
+                        <div *ngFor="let blokKey of blokKeys(selectedSectionText)" class="blok-item">
+                          <div class="tree-folder-row" (click)="toggleBlok(blokKey)" [attr.data-blok]="blokKey">
+                            <span class="tree-icon">📁</span>
+                            <span class="tree-desc"><b>{{ blokKey }}</b></span>
+                          </div>
+                          <div class="tree-content" *ngIf="openedBlok[blokKey]">
+                            <div class="tree-controls">
+                              <button (click)="speakBlokText(selectedSectionIndex, blokKey)">Start</button>
+                              <button (click)="stopSpeech()">Stop</button>
+                            </div>
+                            <textarea readonly class="tree-textarea">{{ podzielNaBloki(selectedSectionText).bloki[blokKey] }}</textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-template #showWholeText>
+                    <div class="tree-controls">
+                      <button (click)="speakSectionText()">Start</button>
+                      <button (click)="stopSpeech()">Stop</button>
+                    </div>
+                    <textarea readonly class="tree-textarea">{{ selectedSectionText }}</textarea>
+                  </ng-template>
+                </ng-container>
           </div>
         </li>
       </ul>
