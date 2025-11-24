@@ -101,12 +101,16 @@ export class AppComponent implements AfterViewInit {
   public openedBlok: { [key: string]: boolean } = {};
 
   toggleBlok(blokKey: string): void {
-    // Zamknij wszystkie inne bloki
-    Object.keys(this.openedBlok).forEach(key => {
-      this.openedBlok[key] = false;
-    });
-    // Otwórz/zamknij wybrany blok
-    this.openedBlok[blokKey] = !this.openedBlok[blokKey];
+    if (this.openedBlok[blokKey]) {
+      // Jeśli kliknięty blok był otwarty, zamknij go
+      this.openedBlok[blokKey] = false;
+    } else {
+      // Zamknij wszystkie inne bloki i otwórz ten jeden
+      Object.keys(this.openedBlok).forEach(key => {
+        this.openedBlok[key] = false;
+      });
+      this.openedBlok[blokKey] = true;
+    }
   }
   // Czytanie tekstu wybranego bloku
   speakBlokText(sectionIdx: number, blokKey: string): void {

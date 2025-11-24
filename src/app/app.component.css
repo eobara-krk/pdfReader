@@ -1,8 +1,33 @@
+@media (max-width: 700px) {
+  .blok-item {
+    margin-left: 0 !important;
+  }
+  .blok-item .tree-folder-row {
+    border-radius: 12px !important;
+    margin-left: 0 !important;
+    background: #e8f5e9 !important; /* jasnozielone tło */
+    border-color: #81c784 !important; /* zielona ramka */
+    box-shadow: 0 1px 4px rgba(129, 199, 132, 0.10) !important;
+  }
+  .blok-item .tree-content {
+    background: #f1f8e9 !important;
+    border: 2px solid #aed581 !important;
+    margin-left: 0 !important;
+    box-shadow: 0 1px 4px rgba(129, 199, 132, 0.10) !important;
+  }
+  .tree-connector-wrapper {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+  .tree-connector {
+    display: none !important;
+  }
+}
 /* Wrapper z pionową linią prowadzącą do podfolderów BLOK */
 .tree-connector-wrapper {
   position: relative;
-  margin-left: 32px;
-  padding-left: 18px;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
 }
 .tree-connector {
   position: absolute;
@@ -19,7 +44,7 @@
   z-index: 1;
 }
 .blok-item {
-  margin-left: 24px;
+  margin-left: 0 !important;
   margin-bottom: 8px;
 }
 .blok-item .tree-folder-row {
@@ -83,12 +108,12 @@
 /* Kolory bloków */
 
 .blok-item .tree-folder-row {
-  background: linear-gradient(90deg, #f6f8fa 0%, #ece9f6 100%);
+  background: #e8f5e9 !important; /* jasnozielone tło */
   border-radius: 12px 12px 0 0;
-  border: 2px solid #cfd8dc;
-  box-shadow: 0 1px 4px rgba(180, 180, 200, 0.07);
+  border: 2px solid #81c784 !important; /* zielona ramka */
+  box-shadow: 0 1px 4px rgba(129, 199, 132, 0.10) !important;
   font-weight: bold;
-  margin-left: 18px;
+  margin-left: 0 !important;
 }
 .blok-item .tree-folder-row[data-blok="BLOK I"] {
   background: linear-gradient(90deg, #e3f0ff 0%, #b3c6fc 100%);
@@ -104,10 +129,11 @@
 }
 
 .blok-item .tree-content {
-  background: #f6f8fa;
+  background: #f1f8e9 !important;
   border-radius: 0 0 12px 12px;
-  box-shadow: 0 1px 4px rgba(180, 180, 200, 0.07);
-  margin: 0 0 12px 18px;
+  box-shadow: 0 1px 4px rgba(129, 199, 132, 0.10) !important;
+  border: 2px solid #aed581 !important;
+  margin: 0 0 12px 0 !important;
   padding: 16px;
 }
 
